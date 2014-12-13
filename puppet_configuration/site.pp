@@ -1,5 +1,6 @@
 include apt
 apt::ppa{'ppa:brightbox/ruby-ng-experimental':}
+apt::ppa{'ppa:jon-severinsson/ffmpeg':}
 
 $environment_file  = "/etc/environment"
 $postgres_username = 'one'
@@ -88,4 +89,35 @@ exec { "gem install bundler":
   require => Package["ruby2.1-dev"],
   cwd     => '/tmp',
   path    => ['/usr/bin'],
+}
+
+package { "xvfb":
+  ensure => "installed",
+}
+
+$alsa_packages = [
+ "libasound2",
+ "libasound2-plugins",
+ "alsa-utils",
+ "alsa-oss"
+]
+
+package { $alsa_packages: ensure => "installed" }
+
+$pulse_packages = [
+    "pulseaudio",
+    "pulseaudio-utils",
+    "mplayer",
+]
+
+package { $pulse_packages: ensure => "installed" }
+
+user { "tich":
+  ensure     => "present",
+  groups     => ["pulse-access", "pulse"],
+  managehome => true,
+}
+
+package { "ffmpeg":
+  require      => Apt::Ppa['ppa:jon-severinsson/ffmpeg'],
 }
