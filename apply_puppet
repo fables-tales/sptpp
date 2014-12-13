@@ -1,0 +1,3 @@
+#!/bin/bash
+
+puppet apply puppet_configuration/site.pp --modulepath puppet_configuration/modules
