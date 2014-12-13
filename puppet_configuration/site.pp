@@ -119,5 +119,19 @@ user { "tich":
 }
 
 package { "ffmpeg":
-  require      => Apt::Ppa['ppa:jon-severinsson/ffmpeg'],
+  require => Apt::Ppa['ppa:jon-severinsson/ffmpeg'],
 }
+
+
+package { "vbam":
+  ensure  => "installed",
+}
+
+exec { "/usr/bin/wget -q -O - http://archive.getdeb.net/getdeb-archive.key | /usr/bin/apt-key add - && sudo sh -c 'echo \"deb http://archive.getdeb.net/ubuntu precise-getdeb games\" >> /etc/apt/sources.list.d/getdeb.list' && /usr/bin/apt-get update":
+  before => Package["vbam"]
+}
+
+package {"xdotool":
+  ensure => "installed",
+}
+
